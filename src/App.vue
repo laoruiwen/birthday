@@ -13,13 +13,15 @@
 
     <div>
       <div class="mascot"></div>
-      <div class="number">
+      <div class="numberBox">
         <h1>{{ $t("celebrated") }}</h1>
+        <DigitalFlop :number="celebrated"></DigitalFlop>
         <h1>{{ $t("discounted") }}</h1>
+        <DigitalFlop :number="discounted"></DigitalFlop>
       </div>
     </div>
 
-    <div>
+    <div class="ribbon">
       <span class="bokeh"></span>
       <span class="bokeh"></span>
       <span class="bokeh"></span>
@@ -81,20 +83,24 @@
 <script>
 
 import {vueBaberrage} from 'vue-baberrage'
-
+import DigitalFlop from './components/DigitalFlop.vue'
 
 export default {
   name: 'App',
   components: {
-    vueBaberrage
+    vueBaberrage,
+    DigitalFlop
   },
   data() {
     return {
       currentId: 0,
-      barrageList: []
+      barrageList: [],
+      celebrated: '000000000',
+      discounted: '0000000000',
     }
   },
   mounted() {
+    this.getBirthdayInformation();
     this.getTodayBarrage();
     this.clearTodayBarrage();
   },
@@ -102,6 +108,29 @@ export default {
     clearInterval(this.timmer)
   },
   methods: {
+    /**
+     * 获取店铺生日信息
+     */
+    getBirthdayInformation() {
+      this.$axios.get('/getBirthdayInformation')
+          .then((res) => {
+            const options = res.data;
+            if (options.success) {
+              let celebrated = options.data.toString(),
+                  discounted = (options.data * this.baseConfig.discount).toString(),
+                  celebratedZero = 9 - celebrated.length,
+                  discountedZero = 10 - discounted.length;
+              if(celebratedZero > 0) {
+                celebrated = Array(celebratedZero + 1).join(0) + celebrated;
+              }
+              if(celebratedZero > 0) {
+                discounted = Array(discountedZero + 1).join(0) + discounted;
+              }
+              this.celebrated = celebrated;
+              this.discounted = discounted;
+            }
+          })
+    },
     /**
      * 获取当天弹幕列表
      */
@@ -164,20 +193,26 @@ export default {
 
 .mascot {
   display: inline-block;
-  width: 22%;
+  width: 20%;
 }
 
-.number {
+.numberBox {
   display: inline-block;
-  width: 78%;
+  width: 80%;
 
   h1 {
     font-size: 4rem;
-    font-family: "Arial";
-    color: rgb(233, 198, 143);
+    color: #e9d461;
     font-weight: bold;
-    text-shadow: 0 7px 6.93px rgba(145, 112, 2, 0.004);
+    text-shadow: .3rem .3rem .2rem #333;
   }
+}
+
+.ribbon {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: -1;
 }
 </style>
 
