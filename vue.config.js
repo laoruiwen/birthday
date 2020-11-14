@@ -3,24 +3,29 @@ const path = require('path')
 // 是否为生产环境
 const isProduction = process.env.NODE_ENV !== 'development';
 
+const config = require('./public/config.json')
+
 // gzip压缩
 const CompressionWebpackPlugin = require('compression-webpack-plugin')
+
 function resolve(dir) {
     return path.join(__dirname, dir)
 }
+
+const proxy = {};
+
+proxy['/' + config.projectName] = {  //项目名
+    target: 'https://yapi.baidu.com/mock/8101',// 接口的域名
+    secure: true, // 如果是https接口，需要配置这个参数为true
+    changeOrigin: true,// 如果接口跨域，需要进行这个参数配置
+}// 代理转发配置，用于调试环境
 
 module.exports = {
     publicPath: '',
     assetsDir: 'static',
     productionSourceMap: true,
     devServer: {
-        proxy: {
-            '/birthday': {  //项目名
-                target: 'https://yapi.baidu.com/mock/8101birthday',// 接口的域名
-                secure: false, // 如果是https接口，需要配置这个参数为true
-                changeOrigin: true,// 如果接口跨域，需要进行这个参数配置
-            },
-        } // 代理转发配置，用于调试环境
+        proxy: proxy
     },
     lintOnSave: false,  //去除eslint
     configureWebpack: config => {
