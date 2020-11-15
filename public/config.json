@@ -2,7 +2,7 @@
   "projectName": "birthdayRestaurant",
   "socketIoUrl": "http://localhost:8080/barrage",
   "barrage": {
-    "extraWidth": 800
+
   },
   "discount": 30,
   "languages": {
@@ -12,13 +12,17 @@
         "celebrated": "寿星总人数",
         "discounted": "寿星折扣总数（￥）",
         "dialogue": "来和我们一起庆祝生日吧！",
-        "barrage" : "{customer}在{restaurantName}店{tableNumber}桌过生日！"
+        "man": "{customer}先生",
+        "woman": "{customer}女士",
+        "barrage": "在{restaurantName}号餐厅第{tableNumber}桌过生日！"
       },
       "en": {
         "celebrated": "Total Birthdays Celebrated",
         "discounted": "Total Birthdays Discounted($)",
         "dialogue": "Celebrate Your Birthday With Us!",
-        "barrage" : "{customer} at {restaurantName} in {tableNumber} celebrating birthday!"
+        "man": "Mr. {customer}",
+        "woman": "Ms. {customer}",
+        "barrage": " celebrating birthday at {restaurantName} Favor Taste Table {tableNumber} !"
       }
     }
   }

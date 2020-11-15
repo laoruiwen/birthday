@@ -47,7 +47,7 @@ export default {
       this.list.forEach((value, index) => {
         setTimeout(() => {
           value.top = parseFloat((value.num * Hei) + (Hei * 10));
-        }, index * 300);
+        }, index * 100);
       });
     }
   }
@@ -56,9 +56,9 @@ export default {
 
 <style lang="scss" scoped>
 .number {
-  height: 12rem;
+  height: 11.5rem;
   margin-top: 2rem;
-  margin-bottom: 5rem;
+  margin-bottom: 6rem;
 
   ul {
     display: inline-block;
@@ -75,15 +75,15 @@ export default {
         background: linear-gradient(to bottom, #ffff00, #ffb725);
         -webkit-background-clip: text;
         color: transparent;
-        font-size: 8rem;
-        line-height: 1.8;
+        font-size: 10rem;
+        line-height: 1.2;
         float: left;
       }
 
       .dataBoc {
         position: relative;
-        width: 8rem;
-        height: 12rem;
+        width: 7.5rem;
+        height: 11.5rem;
         text-align: center;
         margin: 0 .6rem;
         background: url(~@/assets/images/DigitalFlopBack.png) no-repeat center; //背景图
@@ -101,10 +101,10 @@ export default {
           span {
             width: 100%;
             height: 100%;
-            line-height: 12rem;
+            line-height: 11.5rem;
             float: left;
             text-align: center;
-            font-size: 8rem;
+            font-size: 7.5rem;
             font-weight: bold;
             background: linear-gradient(to bottom, #ffff00, #ffb725, #ffff00);
             -webkit-background-clip: text;

@@ -11,8 +11,15 @@
       </vue-baberrage>
     </div>
 
-    <div>
-      <div class="mascot"></div>
+    <div class="height100">
+      <div class="mascot">
+        <div class="dialogBox">
+          <div class="dialog">
+            <span>{{ $t("dialogue") }}</span>
+          </div>
+        </div>
+        <img src="mascot.png" width="85%">
+      </div>
       <div class="numberBox">
         <h1>{{ $t("celebrated") }}</h1>
         <DigitalFlop :number="celebratedString"></DigitalFlop>
@@ -170,8 +177,10 @@ export default {
       this.barrageList.push(Object.assign({
         id: ++this.currentId,
         avatar: require("./assets/images/gift.png"),
-        msg: this.$t('barrage', data),
-        time: Math.round(Math.random() * 10) % 3 + 14
+        msg: this.$t(data.gender ? 'woman' : 'man', data) + this.$t('barrage', data),
+        time: 15,
+        extraWidth: Math.round(Math.random() * 10) * 100 + 500
+        //time: Math.round(Math.random() * 10) % 3 + 14
       }, this.baseConfig.barrage))
     },
     /**
@@ -204,19 +213,40 @@ export default {
 
 .baberrage {
   padding-left: 12%;
-  height: 20%;
+  padding-top: 1%;
+  height: 18%;
   position: relative;
-  font-size: 1.4rem;
+  font-size: 1.6rem;
 }
 
 .mascot {
-  display: inline-block;
-  width: 17%;
+  float: left;
+  width: 20%;
+  height: 100%;
+  text-align: center;
+  padding: 5% 0;
+
+  .dialogBox {
+    height: 20%;
+    padding: 0 5%;
+
+    .dialog {
+      height: 100%;
+      color: #4b5a63;
+      font-size: 1.8rem;
+      font-weight: bold;
+      padding: 2.3rem 2.6rem;
+      line-height: 1.5;
+      background: url(~@/assets/images/dialog.png) no-repeat;
+      background-size: contain;
+    }
+  }
+
 }
 
 .numberBox {
-  display: inline-block;
-  width: 83%;
+  float: left;
+  width: 80%;
 
   h1 {
     font-size: 4rem;
