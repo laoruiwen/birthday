@@ -3,6 +3,8 @@ import App from './App.vue'
 import 'normalize.css'
 import axios from 'axios'
 import VueI18n from 'vue-i18n'
+import SocketIO from 'socket.io-client'
+import VueSocketIO from 'vue-socket.io'
 
 Vue.config.productionTip = false
 
@@ -16,6 +18,12 @@ axios.get('config.json')
         //设置请求基本路径
         axios.defaults.baseURL= response.data.projectName;
         Vue.prototype.$axios = axios;
+
+        //引入socket.io
+        Vue.use(new VueSocketIO({
+            debug: true,
+            connection: SocketIO(response.data.socketIoUrl)
+        }))
 
         // 通过选项创建 VueI18n 实例
         const i18n = new VueI18n(response.data.languages)

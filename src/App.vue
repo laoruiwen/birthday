@@ -15,9 +15,9 @@
       <div class="mascot"></div>
       <div class="numberBox">
         <h1>{{ $t("celebrated") }}</h1>
-        <DigitalFlop :number="celebrated"></DigitalFlop>
+        <DigitalFlop :number="celebratedString"></DigitalFlop>
         <h1>{{ $t("discounted") }}</h1>
-        <DigitalFlop :number="discounted"></DigitalFlop>
+        <DigitalFlop :number="discountedString"></DigitalFlop>
       </div>
     </div>
 
@@ -95,52 +95,70 @@ export default {
     return {
       currentId: 0,
       barrageList: [],
-      celebrated: '000000000',
-      discounted: '0000000000',
+      celebrated: 0,
+      celebratedString: '000000000',
+      discounted: 0,
+      discountedString: '0000000000',
     }
   },
   mounted() {
-    this.getBirthdayInformation();
-    this.getTodayBarrage();
+    this.$axios.all([this.getBirthdayInformation(), this.getTodayBarrage()])
+        .then(this.$axios.spread( () => {
+          this.$socket.emit('init');
+        }));
     this.clearTodayBarrage();
   },
   beforeDestroy() {
     clearInterval(this.timmer)
+  },
+  sockets: {
+    birthdayInfo(data) {
+      this.addOneBarrage(data);
+      this.addOneBirthday(this.celebrated+1);
+    }
   },
   methods: {
     /**
      * 获取店铺生日信息
      */
     getBirthdayInformation() {
-      this.$axios.get('/getBirthdayInformation')
+      return this.$axios.get('/getBirthdayInformation')
           .then((res) => {
             const options = res.data;
             if (options.success) {
-              let celebrated = options.data.toString(),
-                  discounted = (options.data * this.baseConfig.discount).toString(),
-                  celebratedZero = 9 - celebrated.length,
-                  discountedZero = 10 - discounted.length;
-              if(celebratedZero > 0) {
-                celebrated = Array(celebratedZero + 1).join(0) + celebrated;
-              }
-              if(celebratedZero > 0) {
-                discounted = Array(discountedZero + 1).join(0) + discounted;
-              }
-              this.celebrated = celebrated;
-              this.discounted = discounted;
+              this.addOneBirthday(options.data);
             }
           })
+    },
+    /**
+     * 加一个人生日
+     */
+    addOneBirthday(data) {
+      this.celebrated = data;
+      this.discounted = data * this.baseConfig.discount;
+      let celebrated = this.celebrated.toString(),
+          discounted = this.discounted.toString(),
+          celebratedZero = 9 - celebrated.length,
+          discountedZero = 10 - discounted.length;
+      if(celebratedZero > 0) {
+        celebrated = Array(celebratedZero + 1).join(0) + celebrated;
+      }
+      if(celebratedZero > 0) {
+        discounted = Array(discountedZero + 1).join(0) + discounted;
+      }
+      this.celebratedString = celebrated;
+      this.discountedString = discounted;
     },
     /**
      * 获取当天弹幕列表
      */
     getTodayBarrage() {
-      this.$axios.get('/todayBarrage')
+      return this.$axios.get('/todayBarrage')
           .then((res) => {
             const options = res.data;
             if (options.success) {
               options.data.forEach((data) => {
-                this.addToList(this.$t('barrage', data));
+                this.addOneBarrage(data);
               })
             }
           })
@@ -148,11 +166,11 @@ export default {
     /**
      * 增加一条弹幕
      */
-    addToList(msg) {
+    addOneBarrage(data) {
       this.barrageList.push(Object.assign({
         id: ++this.currentId,
         avatar: require("./assets/images/gift.png"),
-        msg: msg,
+        msg: this.$t('barrage', data),
         time: Math.round(Math.random() * 10) % 3 + 14
       }, this.baseConfig.barrage))
     },
@@ -193,16 +211,16 @@ export default {
 
 .mascot {
   display: inline-block;
-  width: 20%;
+  width: 17%;
 }
 
 .numberBox {
   display: inline-block;
-  width: 80%;
+  width: 83%;
 
   h1 {
     font-size: 4rem;
-    color: #e9d461;
+    color: #ffe641;
     font-weight: bold;
     text-shadow: .3rem .3rem .2rem #333;
   }

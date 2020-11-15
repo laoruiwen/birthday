@@ -20,6 +20,22 @@ proxy['/' + config.projectName] = {  //项目名
     changeOrigin: true,// 如果接口跨域，需要进行这个参数配置
 }// 代理转发配置，用于调试环境
 
+proxy['/socket.io'] = {  //项目名
+    target: 'http://localhost:3000',// 接口的域名
+    secure: false, // 如果是https接口，需要配置这个参数为true
+    ws: true,
+    changeOrigin: true,// 如果接口跨域，需要进行这个参数配置
+    logLevel: 'debug'
+}// 代理转发配置，用于调试环境
+
+proxy['sockjs-node'] = {  //项目名
+    target: 'http://localhost:3000',// 接口的域名
+    secure: false, // 如果是https接口，需要配置这个参数为true
+    ws: false,
+    changeOrigin: true,// 如果接口跨域，需要进行这个参数配置
+    logLevel: 'debug'
+}// 代理转发配置，用于调试环境
+
 module.exports = {
     publicPath: '',
     assetsDir: 'static',

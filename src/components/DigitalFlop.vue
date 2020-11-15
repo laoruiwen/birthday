@@ -4,19 +4,16 @@
       <li v-for="(item,index) in list" :key="index">
         <div class="dataBoc">
           <div class="tt" :style="{transition:'all 2.5s ease-in-out 0s',top:'-'+item.top+'px'}">
-                        <span v-for="(item2,index2) in numList" :key="index2">{{ item2 }}
-                         </span>
+            <span v-for="(item2,index2) in numList" :key="index2">{{ item2 }}</span>
           </div>
         </div>
+        <div v-if="(list.length - (index + 1))%3 === 0 && list.length !== (index + 1)" class="separator">,</div>
       </li>
     </ul>
   </div>
 </template>
 
 <script>
-/**
- * TODO: 加入千分符
- */
 export default {
   props: {
     number: {
@@ -71,19 +68,28 @@ export default {
 
     li {
       float: left;
-      width: 8rem;
-      height: 12rem;
-      text-align: center;
-      margin: 0 .6rem;
-      background: url(~@/assets/images/DigitalFlopBack.png) no-repeat center; //背景图
-      background-size: 100% 100%;
       list-style: none;
+      position: relative;
+
+      .separator {
+        background: linear-gradient(to bottom, #ffff00, #ffb725);
+        -webkit-background-clip: text;
+        color: transparent;
+        font-size: 8rem;
+        line-height: 1.8;
+        float: left;
+      }
 
       .dataBoc {
         position: relative;
-        width: 100%;
-        height: 100%;
+        width: 8rem;
+        height: 12rem;
+        text-align: center;
+        margin: 0 .6rem;
+        background: url(~@/assets/images/DigitalFlopBack.png) no-repeat center; //背景图
+        background-size: 100% 100%;
         overflow: hidden;
+        float: left;
 
         .tt {
           position: absolute;
@@ -100,7 +106,7 @@ export default {
             text-align: center;
             font-size: 8rem;
             font-weight: bold;
-            background: linear-gradient(to bottom, #fffd34, #ffb000, #fffd34);
+            background: linear-gradient(to bottom, #ffff00, #ffb725, #ffff00);
             -webkit-background-clip: text;
             color: transparent;
           }
